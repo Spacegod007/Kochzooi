@@ -19,6 +19,7 @@ public class KochFractal extends Observable {
     private boolean cancelled;  // Flag to indicate that calculation has been cancelled 
 
     private void drawKochEdge(double ax, double ay, double bx, double by, int n) {
+        slowProcessDown();
         if (!cancelled) {
             if (n == 1) {
                 hue = hue + 1.0f / nrOfEdges;
