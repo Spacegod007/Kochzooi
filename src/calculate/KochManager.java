@@ -1,6 +1,10 @@
 package calculate;
 
+import javafx.beans.InvalidationListener;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableDoubleValue;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.paint.Color;
 import jsf31kochfractalfx.JSF31KochFractalFX;
 import timeutil.TimeStamp;
@@ -15,7 +19,8 @@ public class KochManager
 {
     private JSF31KochFractalFX jsf31KochFractalFX;
     private KochFractal kochFractal;
-    private DoubleProperty progressProperty;
+    private DoubleProperty processingProgressProperty;
+    private DoubleProperty drawingProgressProperty;
     private List<Edge> edges;
     private ExecutorService executorService;
 
@@ -28,9 +33,10 @@ public class KochManager
     private EdgeManager bottomEdgeManager;
     private EdgeManager leftEdgeManager;
 
-    public KochManager(JSF31KochFractalFX jsf31KochFractalFX, DoubleProperty progressProperty) {
+    public KochManager(JSF31KochFractalFX jsf31KochFractalFX, DoubleProperty processingProgressProperty, DoubleProperty drawingProgressProperty) {
         this.jsf31KochFractalFX = jsf31KochFractalFX;
-        this.progressProperty = progressProperty;
+        this.processingProgressProperty = processingProgressProperty;
+        this.drawingProgressProperty = drawingProgressProperty;
         kochFractal = new KochFractal();
         edges = new ArrayList<>();
         drawSync = new Object();
@@ -52,6 +58,9 @@ public class KochManager
     }
 
     public void changeLevel(int currentLevel) {
+        drawingProgressProperty.setValue(0);
+        processingProgressProperty.setValue(0);
+
         cancelExistingCalculation();
         kochFractal.setLevel(currentLevel);
 
@@ -85,7 +94,7 @@ public class KochManager
         bottomEdgeManager = new EdgeManager(this, currentLevel, Side.BOTTOM);
         leftEdgeManager = new EdgeManager(this, currentLevel, Side.LEFT);
 
-        progressProperty.bind(rightEdgeManager.progressProperty().add(bottomEdgeManager.progressProperty().add(leftEdgeManager.progressProperty())));
+        processingProgressProperty.bind(rightEdgeManager.progressProperty().add(bottomEdgeManager.progressProperty().add(leftEdgeManager.progressProperty())));
 
         executorService.execute(rightEdgeManager);
         executorService.execute(bottomEdgeManager);
@@ -109,8 +118,9 @@ public class KochManager
 
         synchronized (drawSync)
         {
-            for (Edge edge : edges)
+            for (int i = 0; i < edges.size(); i++)
             {
+                Edge edge = edges.get(i);
                 jsf31KochFractalFX.drawEdge(edge);
             }
         }
