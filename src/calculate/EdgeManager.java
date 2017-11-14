@@ -26,6 +26,7 @@ public class EdgeManager extends Task<List<Edge>> implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         edges.add((Edge)arg);
+        kochManager.preDrawEdges((Edge)arg);
         updateProgress(edges.size(), kochFractal.getNrOfEdges());
     }
 

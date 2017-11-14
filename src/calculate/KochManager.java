@@ -1,6 +1,7 @@
 package calculate;
 
 import javafx.beans.property.DoubleProperty;
+import javafx.scene.paint.Color;
 import jsf31kochfractalfx.JSF31KochFractalFX;
 import timeutil.TimeStamp;
 
@@ -21,16 +22,26 @@ public class KochManager
     private TimeStamp generateTimestamp;
     private TimeStamp drawingTimestamp;
 
+    private Object drawSync;
+
+    private EdgeManager rightEdgeManager;
+    private EdgeManager bottomEdgeManager;
+    private EdgeManager leftEdgeManager;
+
     public KochManager(JSF31KochFractalFX jsf31KochFractalFX, DoubleProperty progressProperty) {
         this.jsf31KochFractalFX = jsf31KochFractalFX;
         this.progressProperty = progressProperty;
         kochFractal = new KochFractal();
         edges = new ArrayList<>();
+        drawSync = new Object();
     }
 
     public void addEdges(List<Edge> edges) {
-        this.edges.clear();
-        this.edges.addAll(edges);
+        synchronized (drawSync)
+        {
+            this.edges.clear();
+            this.edges.addAll(edges);
+        }
 
         executorService.shutdown();
 
@@ -56,12 +67,22 @@ public class KochManager
         jsf31KochFractalFX.setTextNrEdges(String.valueOf(kochFractal.getNrOfEdges()));
     }
 
+    private void cancelExistingCalculation()
+    {
+        if (rightEdgeManager != null)
+        {
+            rightEdgeManager.cancelled();
+            bottomEdgeManager.cancelled();
+            leftEdgeManager.cancelled();
+        }
+    }
+
     private void makeThreads(int currentLevel) {
         executorService = Executors.newFixedThreadPool(4);
 
-        EdgeManager rightEdgeManager = new EdgeManager(this, currentLevel, Side.RIGHT);
-        EdgeManager bottomEdgeManager = new EdgeManager(this, currentLevel, Side.BOTTOM);
-        EdgeManager leftEdgeManager = new EdgeManager(this, currentLevel, Side.LEFT);
+        rightEdgeManager = new EdgeManager(this, currentLevel, Side.RIGHT);
+        bottomEdgeManager = new EdgeManager(this, currentLevel, Side.BOTTOM);
+        leftEdgeManager = new EdgeManager(this, currentLevel, Side.LEFT);
 
         progressProperty.bind(rightEdgeManager.progressProperty().add(bottomEdgeManager.progressProperty().add(leftEdgeManager.progressProperty())));
 
@@ -85,12 +106,25 @@ public class KochManager
         drawingTimestamp = new TimeStamp();
         drawingTimestamp.setBegin();
 
-        for (Edge edge : edges)
+        synchronized (drawSync)
         {
-            jsf31KochFractalFX.drawEdge(edge);
+            for (Edge edge : edges)
+            {
+                jsf31KochFractalFX.drawEdge(edge);
+            }
         }
 
         drawingTimestamp.setEnd();
         System.out.println("Tekenen: " + drawingTimestamp.toString());
+    }
+
+    public void preDrawEdges(Edge arg)
+    {
+        synchronized (drawSync)
+        {
+            Edge tempEdge = new Edge(arg.X1, arg.Y1, arg.X2, arg.Y2, Color.WHITE);
+            edges.add(tempEdge);
+            jsf31KochFractalFX.requestDrawEdges();
+        }
     }
 }
