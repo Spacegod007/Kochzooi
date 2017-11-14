@@ -15,6 +15,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.input.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -50,6 +51,8 @@ public class JSF31KochFractalFX extends Application {
     private Label labelCalcText;
     private Label labelDraw;
     private Label labelDrawText;
+    private Label progressLabel;
+    private ProgressBar progressBar;
     
     // Koch panel and its size
     private Canvas kochPanel;
@@ -95,7 +98,7 @@ public class JSF31KochFractalFX extends Application {
         // Label to present current level of Koch fractal
         labelLevel = new Label("Level: " + currentLevel);
         grid.add(labelLevel, 0, 6);
-        
+
         // Button to increase level of Koch fractal
         Button buttonIncreaseLevel = new Button();
         buttonIncreaseLevel.setText("Increase Level");
@@ -128,6 +131,14 @@ public class JSF31KochFractalFX extends Application {
             }
         });
         grid.add(buttonFitFractal, 14, 6);
+
+        //added label and progressbar
+
+        progressLabel = new Label("Progress");
+        grid.add(progressLabel, 0, 7);
+
+        progressBar = new ProgressBar();
+        grid.add(progressBar, 1, 7);
         
         // Add mouse clicked event to Koch panel
         kochPanel.addEventHandler(MouseEvent.MOUSE_CLICKED,
@@ -157,7 +168,7 @@ public class JSF31KochFractalFX extends Application {
         
         // Create Koch manager and set initial level
         resetZoom();
-        kochManager = new KochManager(this);
+        kochManager = new KochManager(this, progressBar.progressProperty());
         kochManager.changeLevel(currentLevel);
         
         // Create the scene and add the grid pane

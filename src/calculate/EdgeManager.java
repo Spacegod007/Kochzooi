@@ -1,9 +1,11 @@
 package calculate;
 
+import javafx.concurrent.Task;
+
 import java.util.*;
 import java.util.concurrent.Callable;
 
-public class EdgeManager implements Callable, Observer {
+public class EdgeManager extends Task<List<Edge>> implements Observer {
 
     private KochManager kochManager;
     private KochFractal kochFractal;
@@ -27,7 +29,7 @@ public class EdgeManager implements Callable, Observer {
     }
 
     @Override
-    public Object call() throws Exception {
+    public List<Edge> call() throws Exception {
         switch (side)
         {
             case LEFT:
