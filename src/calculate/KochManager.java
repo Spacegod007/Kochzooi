@@ -26,7 +26,6 @@ public class KochManager
         this.progressProperty = progressProperty;
         kochFractal = new KochFractal();
         edges = new ArrayList<>();
-        executorService = Executors.newFixedThreadPool(4);
     }
 
     public void addEdges(List<Edge> edges) {
@@ -58,6 +57,7 @@ public class KochManager
     }
 
     private void makeThreads(int currentLevel) {
+        executorService = Executors.newFixedThreadPool(4);
 
         EdgeManager rightEdgeManager = new EdgeManager(this, currentLevel, Side.RIGHT);
         EdgeManager bottomEdgeManager = new EdgeManager(this, currentLevel, Side.BOTTOM);
@@ -65,11 +65,17 @@ public class KochManager
 
         progressProperty.bind(rightEdgeManager.progressProperty().add(bottomEdgeManager.progressProperty().add(leftEdgeManager.progressProperty())));
 
-        Future rightEdges = executorService.submit(rightEdgeManager);
-        Future bottomEdges = executorService.submit(bottomEdgeManager);
-        Future leftEdges = executorService.submit(leftEdgeManager);
-        
-        executorService.execute(new EdgeTracker(this, rightEdges, bottomEdges, leftEdges));
+        executorService.execute(rightEdgeManager);
+        executorService.execute(bottomEdgeManager);
+        executorService.execute(leftEdgeManager);
+
+        /*
+        Future<List<Edge>> rightEdges = executorService.submit(rightEdgeManager);
+        Future<List<Edge>> bottomEdges = executorService.submit(bottomEdgeManager);
+        Future<List<Edge>> leftEdges = executorService.submit(leftEdgeManager);
+        */
+
+        executorService.execute(new EdgeTracker(this, rightEdgeManager, bottomEdgeManager, leftEdgeManager));
     }
 
     public void drawEdges()
@@ -80,7 +86,9 @@ public class KochManager
         drawingTimestamp.setBegin();
 
         for (Edge edge : edges)
+        {
             jsf31KochFractalFX.drawEdge(edge);
+        }
 
         drawingTimestamp.setEnd();
         System.out.println("Tekenen: " + drawingTimestamp.toString());

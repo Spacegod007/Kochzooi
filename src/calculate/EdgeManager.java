@@ -26,9 +26,10 @@ public class EdgeManager extends Task<List<Edge>> implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         edges.add((Edge)arg);
+        updateProgress(edges.size(), kochFractal.getNrOfEdges());
     }
 
-    @Override
+    //@Override
     public List<Edge> call() throws Exception {
         switch (side)
         {
@@ -42,6 +43,14 @@ public class EdgeManager extends Task<List<Edge>> implements Observer {
                 kochFractal.generateRightEdge();
                 break;
         }
+
         return edges;
+    }
+
+    @Override
+    protected void cancelled()
+    {
+        kochFractal.cancel();
+        super.cancelled();
     }
 }

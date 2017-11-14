@@ -3,7 +3,6 @@ package calculate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
 public class EdgeTracker implements Runnable{
@@ -28,9 +27,18 @@ public class EdgeTracker implements Runnable{
     public void run() {
         try
         {
+            while (!rightEdge.isDone() && !bottomEdge.isDone() && !leftEdge.isDone())
+            {
+                if (rightEdge.isCancelled() || bottomEdge.isCancelled() || leftEdge.isCancelled())
+                {
+                    return;
+                }
+            }
+
             edges.addAll(rightEdge.get());
             edges.addAll(bottomEdge.get());
             edges.addAll(leftEdge.get());
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
