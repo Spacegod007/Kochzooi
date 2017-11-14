@@ -49,9 +49,8 @@ public class EdgeManager extends Task<List<Edge>> implements Observer {
     }
 
     @Override
-    protected void cancelled()
-    {
+    public boolean cancel(boolean mayInterruptIfRunning) {
         kochFractal.cancel();
-        super.cancelled();
+        return super.cancel(mayInterruptIfRunning);
     }
 }

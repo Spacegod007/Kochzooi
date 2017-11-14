@@ -52,6 +52,7 @@ public class KochManager
     }
 
     public void changeLevel(int currentLevel) {
+        cancelExistingCalculation();
         kochFractal.setLevel(currentLevel);
 
         generateTimestamp = new TimeStamp();
@@ -71,9 +72,9 @@ public class KochManager
     {
         if (rightEdgeManager != null)
         {
-            rightEdgeManager.cancelled();
-            bottomEdgeManager.cancelled();
-            leftEdgeManager.cancelled();
+            rightEdgeManager.cancel();
+            bottomEdgeManager.cancel();
+            leftEdgeManager.cancel();
         }
     }
 
