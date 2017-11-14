@@ -3,14 +3,13 @@ package calculate;
 import javafx.concurrent.Task;
 
 import java.util.*;
-import java.util.concurrent.Callable;
 
 public class EdgeManager extends Task<List<Edge>> implements Observer {
 
-    private KochManager kochManager;
-    private KochFractal kochFractal;
-    private List<Edge> edges;
-    private Side side;
+    private final KochManager kochManager;
+    private final KochFractal kochFractal;
+    private final List<Edge> edges;
+    private final Side side;
 
     public EdgeManager(KochManager kochManager, int level, Side side) {
         this.kochManager = kochManager;

@@ -1,10 +1,6 @@
 package calculate;
 
-import javafx.beans.InvalidationListener;
 import javafx.beans.property.DoubleProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableDoubleValue;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.paint.Color;
 import jsf31kochfractalfx.JSF31KochFractalFX;
 import timeutil.TimeStamp;
@@ -13,30 +9,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 public class KochManager
 {
-    private JSF31KochFractalFX jsf31KochFractalFX;
-    private KochFractal kochFractal;
-    private DoubleProperty processingProgressProperty;
-    private DoubleProperty drawingProgressProperty;
-    private List<Edge> edges;
+    private final JSF31KochFractalFX jsf31KochFractalFX;
+    private final KochFractal kochFractal;
+    private final DoubleProperty processingProgressProperty;
+    private final List<Edge> edges;
     private ExecutorService executorService;
 
     private TimeStamp generateTimestamp;
-    private TimeStamp drawingTimestamp;
 
-    private Object drawSync;
+    private final Object drawSync;
 
     private EdgeManager rightEdgeManager;
     private EdgeManager bottomEdgeManager;
     private EdgeManager leftEdgeManager;
 
-    public KochManager(JSF31KochFractalFX jsf31KochFractalFX, DoubleProperty processingProgressProperty, DoubleProperty drawingProgressProperty) {
+    public KochManager(JSF31KochFractalFX jsf31KochFractalFX, DoubleProperty processingProgressProperty) {
         this.jsf31KochFractalFX = jsf31KochFractalFX;
         this.processingProgressProperty = processingProgressProperty;
-        this.drawingProgressProperty = drawingProgressProperty;
         kochFractal = new KochFractal();
         edges = new ArrayList<>();
         drawSync = new Object();
@@ -52,14 +44,13 @@ public class KochManager
         executorService.shutdown();
 
         generateTimestamp.setEnd();
-        System.out.println("Generating: " + generateTimestamp.toString());
+
+        jsf31KochFractalFX.setTextCalc(generateTimestamp.toString());
 
         jsf31KochFractalFX.requestDrawEdges();
     }
 
     public void changeLevel(int currentLevel) {
-        drawingProgressProperty.setValue(0);
-        processingProgressProperty.setValue(0);
 
         cancelExistingCalculation();
         kochFractal.setLevel(currentLevel);
@@ -68,10 +59,7 @@ public class KochManager
 
         makeThreads(currentLevel);
 
-        generateTimestamp.setEnd();
-        System.out.println("Genereren: " + generateTimestamp.toString());
-
-        generateTimestamp.setEnd();
+        generateTimestamp.setBegin();
 
         jsf31KochFractalFX.setTextCalc(generateTimestamp.toString());
         jsf31KochFractalFX.setTextNrEdges(String.valueOf(kochFractal.getNrOfEdges()));
@@ -100,12 +88,6 @@ public class KochManager
         executorService.execute(bottomEdgeManager);
         executorService.execute(leftEdgeManager);
 
-        /*
-        Future<List<Edge>> rightEdges = executorService.submit(rightEdgeManager);
-        Future<List<Edge>> bottomEdges = executorService.submit(bottomEdgeManager);
-        Future<List<Edge>> leftEdges = executorService.submit(leftEdgeManager);
-        */
-
         executorService.execute(new EdgeTracker(this, rightEdgeManager, bottomEdgeManager, leftEdgeManager));
     }
 
@@ -113,20 +95,21 @@ public class KochManager
     {
         jsf31KochFractalFX.clearKochPanel();
 
-        drawingTimestamp = new TimeStamp();
+        TimeStamp drawingTimestamp = new TimeStamp();
+
         drawingTimestamp.setBegin();
 
         synchronized (drawSync)
         {
-            for (int i = 0; i < edges.size(); i++)
+            for (Edge edge : edges)
             {
-                Edge edge = edges.get(i);
                 jsf31KochFractalFX.drawEdge(edge);
             }
         }
 
         drawingTimestamp.setEnd();
-        System.out.println("Tekenen: " + drawingTimestamp.toString());
+
+        jsf31KochFractalFX.setTextDraw(drawingTimestamp.toString());
     }
 
     public void preDrawEdges(Edge arg)

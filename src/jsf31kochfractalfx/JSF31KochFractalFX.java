@@ -8,7 +8,6 @@ import calculate.*;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -53,8 +52,6 @@ public class JSF31KochFractalFX extends Application {
     private Label labelDrawText;
     private Label processingProgressLabel;
     private ProgressBar processingProgressBar;
-    private Label drawingProgressLabel;
-    private ProgressBar drawingProgressBar;
     
     // Koch panel and its size
     private Canvas kochPanel;
@@ -104,34 +101,19 @@ public class JSF31KochFractalFX extends Application {
         // Button to increase level of Koch fractal
         Button buttonIncreaseLevel = new Button();
         buttonIncreaseLevel.setText("Increase Level");
-        buttonIncreaseLevel.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                increaseLevelButtonActionPerformed(event);
-            }
-        });
+        buttonIncreaseLevel.setOnAction(this::increaseLevelButtonActionPerformed);
         grid.add(buttonIncreaseLevel, 3, 6);
 
         // Button to decrease level of Koch fractal
         Button buttonDecreaseLevel = new Button();
         buttonDecreaseLevel.setText("Decrease Level");
-        buttonDecreaseLevel.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                decreaseLevelButtonActionPerformed(event);
-            }
-        });
+        buttonDecreaseLevel.setOnAction(this::decreaseLevelButtonActionPerformed);
         grid.add(buttonDecreaseLevel, 5, 6);
         
         // Button to fit Koch fractal in Koch panel
         Button buttonFitFractal = new Button();
         buttonFitFractal.setText("Fit Fractal");
-        buttonFitFractal.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                fitFractalButtonActionPerformed(event);
-            }
-        });
+        buttonFitFractal.setOnAction(this::fitFractalButtonActionPerformed);
         grid.add(buttonFitFractal, 14, 6);
 
         //added label and progressbar
@@ -141,42 +123,21 @@ public class JSF31KochFractalFX extends Application {
 
         processingProgressBar = new ProgressBar();
         grid.add(processingProgressBar, 1, 7);
-
-        drawingProgressLabel = new Label("Drawing");
-        grid.add(drawingProgressLabel, 0, 8);
-
-        drawingProgressBar = new ProgressBar();
-        grid.add(drawingProgressBar, 1, 8);
         
         // Add mouse clicked event to Koch panel
         kochPanel.addEventHandler(MouseEvent.MOUSE_CLICKED,
-            new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    kochPanelMouseClicked(event);
-                }
-            });
+                this::kochPanelMouseClicked);
         
         // Add mouse pressed event to Koch panel
         kochPanel.addEventHandler(MouseEvent.MOUSE_PRESSED,
-            new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    kochPanelMousePressed(event);
-                }
-            });
+                this::kochPanelMousePressed);
         
         // Add mouse dragged event to Koch panel
-        kochPanel.setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                kochPanelMouseDragged(event);
-            }
-        });
+        kochPanel.setOnMouseDragged(this::kochPanelMouseDragged);
         
         // Create Koch manager and set initial level
         resetZoom();
-        kochManager = new KochManager(this, processingProgressBar.progressProperty(), drawingProgressBar.progressProperty());
+        kochManager = new KochManager(this, processingProgressBar.progressProperty());
         kochManager.changeLevel(currentLevel);
         
         // Create the scene and add the grid pane
@@ -223,11 +184,11 @@ public class JSF31KochFractalFX extends Application {
     }
     
     public void setTextNrEdges(String text) {
-        labelNrEdgesText.setText(text);
+        Platform.runLater(() -> labelNrEdgesText.setText(text));
     }
     
     public void setTextCalc(String text) {
-        labelCalcText.setText(text);
+        Platform.runLater(() -> labelCalcText.setText(text));
     }
     
     public void setTextDraw(String text) {
@@ -235,12 +196,7 @@ public class JSF31KochFractalFX extends Application {
     }
     
     public void requestDrawEdges() {
-        Platform.runLater(new Runnable(){
-            @Override
-            public void run() {
-                kochManager.drawEdges();
-            }
-        });
+        Platform.runLater(() -> kochManager.drawEdges());
     }
     
     private void increaseLevelButtonActionPerformed(ActionEvent event) {

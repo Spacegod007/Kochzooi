@@ -98,7 +98,7 @@ public class TimeStamp {
     /**
      * verkorte versie van setEndBegin
      *
-     * @param timepoint
+     * @param timepoint is a moment in time
      */
     public void seb(String timepoint) {
         this.setEndBegin(timepoint);
@@ -134,15 +134,16 @@ public class TimeStamp {
 
         @Override
         public String toString() {
-            return "From '" + this.beginS + "' till '" + this.endS + "' is " + (this.end - this.begin) + " mSec.";
+            return (this.end - this.begin) + " mSec.";
         }
     }
 
     /**
      * override van toString methode. Geeft alle tijdsperiode weer.
      */
+    @Override
     public String toString() {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
 
         for (Period p : this.list) {
             buffer.append(p.toString());

@@ -12,8 +12,11 @@ import javafx.scene.paint.Color;
  * @author Peter Boots
  */
 public class Edge {
-    public double X1, Y1, X2, Y2;
-    public Color color;
+    public final double X1;
+    public final double Y1;
+    public final double X2;
+    public final double Y2;
+    public final Color color;
     
     public Edge(double X1, double Y1, double X2, double Y2, Color color) {
         this.X1 = X1;
