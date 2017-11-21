@@ -24,7 +24,7 @@ public class GenerateBufferedTextFile implements Runnable
         KochFractal kochFractal = new KochFractal();
         kochFractal.setLevel(level);
 
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(String.format("%sbufferedEdges.txt", String.valueOf(level)), true)))
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(String.format("%sbufferedEdges.txt", String.valueOf(level)))))
         {
 
             kochFractal.addObserver(new FractalTextStreamObserver(bufferedWriter));

@@ -23,7 +23,7 @@ public class GenerateTextFile implements Runnable
         KochFractal kochFractal = new KochFractal();
         kochFractal.setLevel(level);
 
-        try (OutputStreamWriter outputStreamWriter = new FileWriter(String.format("%sedges.txt", String.valueOf(level)), true))
+        try (OutputStreamWriter outputStreamWriter = new FileWriter(String.format("%sedges.txt", String.valueOf(level))))
         {
 
             kochFractal.addObserver(new FractalTextStreamObserver(outputStreamWriter));

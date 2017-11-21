@@ -24,7 +24,7 @@ public class GenerateBinaryFile implements Runnable
     {
         KochFractal kochFractal = new KochFractal();
         kochFractal.setLevel(level);
-        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(String.format("%sEdges.bin", String.valueOf(level)), true)))
+        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(String.format("%sEdges.bin", String.valueOf(level)))))
         {
             kochFractal.addObserver(new FractalBinaryStreamObserver(objectOutputStream));
 
