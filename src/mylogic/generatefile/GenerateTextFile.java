@@ -1,10 +1,12 @@
 package mylogic.generatefile;
 
+import calculate.Edge;
 import calculate.KochFractal;
 
-/**
- * Created by Jordi van Roij on 21-Nov-17.
- */
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+
 public class GenerateTextFile implements Runnable
 {
     private final int level;
@@ -19,5 +21,24 @@ public class GenerateTextFile implements Runnable
     {
         KochFractal kochFractal = new KochFractal();
         kochFractal.setLevel(level);
+
+        kochFractal.addObserver((o, arg) ->
+        {
+            Edge edge = (Edge) arg;
+
+            try (FileOutputStream fileOutputStream = new FileOutputStream(String.format("%sedges.txt", String.valueOf(level)), true);
+                 PrintStream printStream = new PrintStream(fileOutputStream))
+            {
+                printStream.println(edge.toString());
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        });
+
+        kochFractal.generateBottomEdge();
+        kochFractal.generateRightEdge();
+        kochFractal.generateLeftEdge();
     }
 }

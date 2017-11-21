@@ -52,8 +52,9 @@ public class Program {
                 if (level > 0)
                 {
                     kochFractal.setLevel(level);
-                    System.out.println(String.format("Selected level: %s", message));
-                    System.out.println(String.format("Number of edges with level: %s%n", kochFractal.getNrOfEdges()));
+
+                    System.out.println(String.format("%nSelected level: %s", message));
+                    System.out.println(String.format("Number of edges to generate: %s%n", kochFractal.getNrOfEdges()));
 
                     System.out.print("Generating");
                     for (int i = 0; i < 3; i++)

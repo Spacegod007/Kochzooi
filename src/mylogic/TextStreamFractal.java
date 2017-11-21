@@ -38,15 +38,7 @@ public class TextStreamFractal {
 
     public static void writeEdgesAsText(int level, Edge edge)
     {
-        try (FileOutputStream fileOutputStream = new FileOutputStream(String.format("%sedges.txt", String.valueOf(level)), true);
-             PrintStream printStream = new PrintStream(fileOutputStream))
-        {
-            printStream.println(edge.toString());
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+
     }
 
     public static void writeBufferedEdgesAsText(int level, Edge edge)
