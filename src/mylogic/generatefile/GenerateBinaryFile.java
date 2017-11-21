@@ -10,18 +10,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
-public class GenerateBinaryFile implements Runnable
+public class GenerateBinaryFile
 {
-    private final int level;
 
     public GenerateBinaryFile(int level)
     {
-        this.level = level;
-    }
 
-    @Override
-    public void run()
-    {
         KochFractal kochFractal = new KochFractal();
         kochFractal.setLevel(level);
         try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(String.format("%sEdges.bin", String.valueOf(level)))))

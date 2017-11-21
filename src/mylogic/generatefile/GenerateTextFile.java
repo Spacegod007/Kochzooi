@@ -8,18 +8,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
-public class GenerateTextFile implements Runnable
+public class GenerateTextFile
 {
-    private final int level;
 
     public GenerateTextFile(int level)
     {
-        this.level = level;
-    }
 
-    @Override
-    public void run()
-    {
         KochFractal kochFractal = new KochFractal();
         kochFractal.setLevel(level);
 

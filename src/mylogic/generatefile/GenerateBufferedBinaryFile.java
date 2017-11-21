@@ -6,45 +6,32 @@ import timeutil.TimeStamp;
 
 import java.io.*;
 
-public class GenerateBufferedBinaryFile implements Runnable
+public class GenerateBufferedBinaryFile
 {
-    private final int level;
 
     public GenerateBufferedBinaryFile(int level)
     {
-        this.level = level;
-    }
-
-    @Override
-    public void run()
-    {
         KochFractal kochFractal = new KochFractal();
         kochFractal.setLevel(level);
+        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(String.format("%sEdges.bin", String.valueOf(level))))))
+        {
+            kochFractal.addObserver(new FractalBinaryStreamObserver(objectOutputStream));
 
+            TimeStamp BinaryFileTime = new TimeStamp();
 
-//
-//        try (BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new ObjectOutputStream(new FileOutputStream(String.format("%sEdges.bin", String.valueOf(level)), true))))
-//        {
-//            kochFractal.addObserver(new FractalBinaryStreamObserver(bufferedOutputStream));
-//        }
-//        catch (IOException e)
-//        {
-//            e.printStackTrace();
-//        }
+            BinaryFileTime.setBegin();
 
+            kochFractal.generateBottomEdge();
+            kochFractal.generateRightEdge();
+            kochFractal.generateLeftEdge();
 
+            BinaryFileTime.setEnd();
 
-
-        TimeStamp bufferedBinaryFileTime = new TimeStamp();
-
-        bufferedBinaryFileTime.setBegin();
-
-        kochFractal.generateBottomEdge();
-        kochFractal.generateRightEdge();
-        kochFractal.generateLeftEdge();
-
-        bufferedBinaryFileTime.setEnd();
-
-        System.out.println(String.format("Buffered binary file generating time: %s", bufferedBinaryFileTime.toString()));
+            System.out.println(String.format("Buffered Binary file generating time: %s", BinaryFileTime.toString()));
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 }

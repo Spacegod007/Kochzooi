@@ -69,10 +69,10 @@ public class Program {
 //                    executorService.execute(new GenerateBinaryFile(level));
 //                    executorService.execute(new GenerateBufferedBinaryFile(level));
 
-                    new GenerateTextFile(level).run();
-                    new GenerateBufferedTextFile(level).run();
-                    new GenerateBinaryFile(level).run();
-                    new GenerateBufferedBinaryFile(level).run();
+                    new GenerateTextFile(level);
+                    new GenerateBinaryFile(level);
+                    new GenerateBufferedTextFile(level);
+                    new GenerateBufferedBinaryFile(level);
                 }
                 else
                 {
