@@ -13,7 +13,7 @@ public class GenerateBufferedBinaryFile
     {
         KochFractal kochFractal = new KochFractal();
         kochFractal.setLevel(level);
-        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(String.format("%sEdges.bin", String.valueOf(level))))))
+        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(String.format("%sBufferedEdges.bin", String.valueOf(level))))))
         {
             kochFractal.addObserver(new FractalBinaryStreamObserver(objectOutputStream));
 
