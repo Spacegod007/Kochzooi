@@ -1,11 +1,12 @@
 package mylogic.generatefile;
 
-import calculate.Edge;
 import calculate.KochFractal;
+import mylogic.FractalTextStreamObserver;
+import timeutil.TimeStamp;
 
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintStream;
+import java.io.OutputStreamWriter;
 
 public class GenerateTextFile implements Runnable
 {
@@ -22,23 +23,26 @@ public class GenerateTextFile implements Runnable
         KochFractal kochFractal = new KochFractal();
         kochFractal.setLevel(level);
 
-        kochFractal.addObserver((o, arg) ->
+        try (OutputStreamWriter outputStreamWriter = new FileWriter(String.format("%sedges.txt", String.valueOf(level)), true))
         {
-            Edge edge = (Edge) arg;
 
-            try (FileOutputStream fileOutputStream = new FileOutputStream(String.format("%sedges.txt", String.valueOf(level)), true);
-                 PrintStream printStream = new PrintStream(fileOutputStream))
-            {
-                printStream.println(edge.toString());
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-        });
+            kochFractal.addObserver(new FractalTextStreamObserver(outputStreamWriter));
 
-        kochFractal.generateBottomEdge();
-        kochFractal.generateRightEdge();
-        kochFractal.generateLeftEdge();
+            TimeStamp textFileTime = new TimeStamp();
+
+            textFileTime.setBegin();
+
+            kochFractal.generateBottomEdge();
+            kochFractal.generateRightEdge();
+            kochFractal.generateLeftEdge();
+
+            textFileTime.setEnd();
+
+            System.out.println(String.format("text file generating time: %s", textFileTime.toString()));
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 }

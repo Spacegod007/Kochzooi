@@ -62,11 +62,17 @@ public class Program {
                         Thread.sleep(500);
                         System.out.print(".");
                     }
+                    System.out.println(String.format("%n"));
 
-                    executorService.execute(new GenerateTextFile(level));
-                    executorService.execute(new GenerateBufferedTextFile(level));
-                    executorService.execute(new GenerateBinaryFile(level));
-                    executorService.execute(new GenerateBufferedBinaryFile(level));
+//                    executorService.execute(new GenerateTextFile(level));
+//                    executorService.execute(new GenerateBufferedTextFile(level));
+//                    executorService.execute(new GenerateBinaryFile(level));
+//                    executorService.execute(new GenerateBufferedBinaryFile(level));
+
+                    new GenerateTextFile(level).run();
+                    new GenerateBufferedTextFile(level).run();
+                    new GenerateBinaryFile(level).run();
+                    new GenerateBufferedBinaryFile(level).run();
                 }
                 else
                 {
