@@ -11,34 +11,71 @@ public class Program {
 
     public static void main(String[] args)
     {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        System.out.print("Please enter the desired level: ");
-        String levelString = null;
-        try {
-            levelString = reader.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        int level = Integer.parseInt(levelString);
+        new Program();
+    }
 
-
-
-
-
-
-
-
+    public Program()
+    {
         KochFractal kochFractal = new KochFractal();
-        kochFractal.addObserver((o, arg) ->
+
+        String message = null;
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+
+        while (true)
         {
-            Edge edge = (Edge) arg;
-            System.out.format("Begin: x:" + edge.X1 + " y:" + edge.Y1 + ",%nEnd: x:" + edge.X2 + " y:" + edge.Y2 + "%n%n");
-        });
+            try
+            {
+                message = bufferedReader.readLine();
+            }
+            catch (IOException e)
+            {
+                continue;
+            }
 
-        kochFractal.setLevel(level);
+            if (message.equalsIgnoreCase("exit"))
+            {
+                break;
+            }
 
-        kochFractal.generateBottomEdge();
-        kochFractal.generateLeftEdge();
-        kochFractal.generateRightEdge();
+            try
+            {
+                int level = Integer.parseInt(message);
+
+                if (level > 0)
+                {
+                    kochFractal.setLevel(level);
+                    System.out.println(String.format("Selected level: %s", message));
+                    System.out.println(String.format("Number of edges with level: %s%n", kochFractal.getNrOfEdges()));
+                }
+                else
+                {
+                    System.out.println("Please enter a number higher than 0");
+                }
+            }
+            catch (Exception e)
+            {
+                continue;
+            }
+        }
+    }
+
+    private void generateTextFile()
+    {
+        KochFractal kochFractal = new KochFractal();
+    }
+
+    private void generateBufferedTextFile()
+    {
+        KochFractal kochFractal = new KochFractal();
+    }
+
+    private void generateBinaryFile()
+    {
+        KochFractal kochFractal = new KochFractal();
+    }
+
+    private void generateBufferedBinaryFile()
+    {
+        KochFractal kochFractal = new KochFractal();
     }
 }
