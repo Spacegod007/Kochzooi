@@ -5,11 +5,11 @@ import calculate.KochFractal;
 /**
  * Created by Jordi van Roij on 21-Nov-17.
  */
-public class generateBufferedTextFile implements Runnable
+public class GenerateTextFile implements Runnable
 {
     private final int level;
 
-    public generateBufferedTextFile(int level)
+    public GenerateTextFile(int level)
     {
         this.level = level;
     }

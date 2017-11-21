@@ -5,11 +5,11 @@ import calculate.KochFractal;
 /**
  * Created by Jordi van Roij on 21-Nov-17.
  */
-public class generateBinaryFile implements Runnable
+public class GenerateBufferedBinaryFile implements Runnable
 {
     private final int level;
 
-    public generateBinaryFile(int level)
+    public GenerateBufferedBinaryFile(int level)
     {
         this.level = level;
     }
