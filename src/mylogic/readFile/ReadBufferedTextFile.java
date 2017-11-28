@@ -3,14 +3,18 @@ package mylogic.readFile;
 
 import calculate.Edge;
 import calculate.KochManager;
+import timeutil.TimeStamp;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReadBufferedTextFile {
-
+public class ReadBufferedTextFile
+{
     public ReadBufferedTextFile(KochManager manager, int level){
+
+        TimeStamp timeStamp = new TimeStamp();
+        timeStamp.setBegin();
 
         try(BufferedReader bufferedReader = new BufferedReader(new FileReader(String.format("%sbufferedEdges.txt", String.valueOf(level))))){
             List<Edge> edges = new ArrayList<>();
@@ -38,6 +42,11 @@ public class ReadBufferedTextFile {
 
                 edges.add(new Edge(edgeValues[0],edgeValues[1],edgeValues[2],edgeValues[3], edgeSplit[4]));
             }
+
+            timeStamp.setEnd();
+
+            System.out.printf("Read text buffered: %s", timeStamp);
+
             manager.addEdges(edges);
 
         }

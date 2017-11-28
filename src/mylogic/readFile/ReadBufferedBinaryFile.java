@@ -3,6 +3,7 @@ package mylogic.readFile;
 
 import calculate.Edge;
 import calculate.KochManager;
+import timeutil.TimeStamp;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -13,6 +14,10 @@ public class ReadBufferedBinaryFile {
     public ReadBufferedBinaryFile(KochManager manager, int level){
         List<Edge> edges = new ArrayList<>();
         List<Integer> test = new ArrayList<>();
+
+        TimeStamp timeStamp = new TimeStamp();
+        timeStamp.setBegin();
+
         try (ObjectInputStream objectInputStream = new ObjectInputStream(new BufferedInputStream(new FileInputStream(String.format("%sEdges.bin", String.valueOf(level)))))) {
             while(true) {
                 try {
@@ -28,6 +33,11 @@ public class ReadBufferedBinaryFile {
         catch (IOException e) {
             System.out.println("There is no file of this level");
         }
+
+        timeStamp.setEnd();
+
+        System.out.printf("Read binary buffered: %s", timeStamp);
+
         manager.addEdges(edges);
     }
 }

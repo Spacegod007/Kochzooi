@@ -6,11 +6,16 @@ import java.util.List;
 
 import calculate.Edge;
 import calculate.KochManager;
+import timeutil.TimeStamp;
 
 
 public class ReadTextFile {
 
-    public ReadTextFile(KochManager manager, int level){
+    public ReadTextFile(KochManager manager, int level)
+    {
+
+        TimeStamp timeStamp = new TimeStamp();
+        timeStamp.setBegin();
 
         try(InputStreamReader inputStreamReader = new FileReader(String.format("%sedges.txt", String.valueOf(level)))){
             List<Edge> edges = new ArrayList<>();
@@ -39,6 +44,9 @@ public class ReadTextFile {
                 edges.add(new Edge(edgeValues[0],edgeValues[1],edgeValues[2],edgeValues[3], edgeSplit[4]));
             }
             manager.addEdges(edges);
+
+            timeStamp.setEnd();
+            System.out.printf("Read text normal: %s", timeStamp);
 
         }
         catch (IOException e) {
