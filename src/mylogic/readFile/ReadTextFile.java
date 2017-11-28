@@ -1,0 +1,48 @@
+package mylogic.readFile;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import calculate.Edge;
+import calculate.KochManager;
+
+
+public class ReadTextFile {
+
+    public ReadTextFile(KochManager manager, int level){
+
+        try(InputStreamReader inputStreamReader = new FileReader(String.format("%sedges.txt", String.valueOf(level)))){
+            List<Edge> edges = new ArrayList<>();
+            List<String> edgeStrings = new ArrayList<>();
+            String edgeData = "";
+            int data = inputStreamReader.read();
+            while(data != -1){
+                if((char) data == '$'){
+                    edgeStrings.add(edgeData);
+                    edgeData = "";
+                }
+                else {
+                    edgeData += (char) data;
+                }
+                    data = inputStreamReader.read();
+
+            }
+
+            for(String edgeString : edgeStrings){
+                String[] edgeSplit = edgeString.split(" ");
+                double[] edgeValues = new double[4];
+                for(int x = 0; x<4; x++) {
+                    edgeValues[x] = Double.parseDouble(edgeSplit[x]);
+                }
+
+                edges.add(new Edge(edgeValues[0],edgeValues[1],edgeValues[2],edgeValues[3], edgeSplit[4]));
+            }
+            manager.addEdges(edges);
+
+        }
+        catch (IOException e) {
+            System.out.println("There is no file for this level");
+        }
+    }
+}

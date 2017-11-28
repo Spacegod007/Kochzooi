@@ -28,6 +28,14 @@ public class Edge implements Serializable{
         this.color = color.toString();
     }
 
+    public Edge(double X1, double Y1, double X2, double Y2, String color){
+        this.X1 = X1;
+        this.Y1 = Y1;
+        this.X2 = X2;
+        this.Y2 = Y2;
+        this.color = color;
+    }
+
     public Color getColor()
     {
         return Color.valueOf(color);
@@ -36,6 +44,6 @@ public class Edge implements Serializable{
     @Override
     public String toString()
     {
-        return String.format("%s %s %s %s %s", X1, Y1, X2, Y2, color);
+        return String.format("%s %s %s %s %s", X1, Y1, X2, Y2, color) + "$";
     }
 }

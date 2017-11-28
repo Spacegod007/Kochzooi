@@ -3,6 +3,10 @@ package calculate;
 import javafx.beans.property.DoubleProperty;
 import javafx.scene.paint.Color;
 import jsf31kochfractalfx.JSF31KochFractalFX;
+import mylogic.readFile.ReadBinaryFile;
+import mylogic.readFile.ReadBufferedBinaryFile;
+import mylogic.readFile.ReadBufferedTextFile;
+import mylogic.readFile.ReadTextFile;
 import timeutil.TimeStamp;
 
 import java.util.ArrayList;
@@ -84,11 +88,21 @@ public class KochManager
 
         processingProgressProperty.bind(rightEdgeManager.progressProperty().add(bottomEdgeManager.progressProperty().add(leftEdgeManager.progressProperty())));
 
+        //Text file unbuffered.
+            //new ReadTextFile(this, currentLevel);
+        //Text file buffered.
+            //new ReadBufferedTextFile(this,currentLevel);
+        //Binary file unbuffered.
+            new ReadBinaryFile(this,currentLevel);
+        //Binary file buffered.
+            //new ReadBufferedBinaryFile(this,currentLevel);
+        /*
         executorService.execute(rightEdgeManager);
         executorService.execute(bottomEdgeManager);
         executorService.execute(leftEdgeManager);
 
         executorService.execute(new EdgeTracker(this, rightEdgeManager, bottomEdgeManager, leftEdgeManager));
+        */
     }
 
     public void drawEdges()
