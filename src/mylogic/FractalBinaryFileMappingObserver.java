@@ -27,6 +27,7 @@ public class FractalBinaryFileMappingObserver implements Observer
     @Override
     public void update(Observable o, Object arg)
     {
+
         try
         {
             MappedByteBuffer out = fileChannel.map(FileChannel.MapMode.READ_WRITE, row, NUMBER_OF_BYTES);
@@ -44,7 +45,7 @@ public class FractalBinaryFileMappingObserver implements Observer
         }
     }
 
-    private byte[] serialize(Object obj) throws IOException {
+    public static byte[] serialize(Object obj) throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         ObjectOutputStream os = new ObjectOutputStream(out);
         os.writeObject(obj);
