@@ -13,11 +13,11 @@ public class ReadBufferedBinaryFile {
     public ReadBufferedBinaryFile(KochManager manager, int level){
         List<Edge> edges = new ArrayList<>();
         List<Integer> test = new ArrayList<>();
-        try (BufferedInputStream bufferedInputStream = new BufferedInputStream(new ObjectInputStream(new FileInputStream(String.format("%sEdges.bin", String.valueOf(level)))))) {
+        try (ObjectInputStream objectInputStream = new ObjectInputStream(new BufferedInputStream(new FileInputStream(String.format("%sEdges.bin", String.valueOf(level)))))) {
             while(true) {
                 try {
-                    test.add(bufferedInputStream.read());
-                    //edges.add(edge);
+                    Edge edge = (Edge) objectInputStream.readObject();
+                    edges.add(edge);
                 }
                 catch(Exception e){
                     break;

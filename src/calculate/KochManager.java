@@ -93,9 +93,9 @@ public class KochManager
         //Text file buffered.
             //new ReadBufferedTextFile(this,currentLevel);
         //Binary file unbuffered.
-            new ReadBinaryFile(this,currentLevel);
+            //new ReadBinaryFile(this,currentLevel);
         //Binary file buffered.
-            //new ReadBufferedBinaryFile(this,currentLevel);
+            new ReadBufferedBinaryFile(this,currentLevel);
         /*
         executorService.execute(rightEdgeManager);
         executorService.execute(bottomEdgeManager);
