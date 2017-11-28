@@ -2,10 +2,7 @@ package mylogic;
 
 import calculate.Edge;
 import calculate.KochFractal;
-import mylogic.generatefile.GenerateBinaryFile;
-import mylogic.generatefile.GenerateBufferedBinaryFile;
-import mylogic.generatefile.GenerateBufferedTextFile;
-import mylogic.generatefile.GenerateTextFile;
+import mylogic.generatefile.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -69,10 +66,11 @@ public class Program {
 //                    executorService.execute(new GenerateBinaryFile(level));
 //                    executorService.execute(new GenerateBufferedBinaryFile(level));
 
-                    new GenerateTextFile(level);
+                    /*new GenerateTextFile(level);
                     new GenerateBinaryFile(level);
                     new GenerateBufferedTextFile(level);
-                    new GenerateBufferedBinaryFile(level);
+                    new GenerateBufferedBinaryFile(level);*/
+                    new GenerateBufferedBinaryFileMapping(level);
                 }
                 else
                 {
