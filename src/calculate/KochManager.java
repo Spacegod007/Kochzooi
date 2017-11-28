@@ -45,7 +45,7 @@ public class KochManager
             this.edges.addAll(edges);
         }
 
-        executorService.shutdown();
+        //executorService.shutdown();
 
         generateTimestamp.setEnd();
 
@@ -80,14 +80,14 @@ public class KochManager
     }
 
     private void makeThreads(int currentLevel) {
-        executorService = Executors.newFixedThreadPool(4);
+        /*executorService = Executors.newFixedThreadPool(4);
 
         rightEdgeManager = new EdgeManager(this, currentLevel, Side.RIGHT);
         bottomEdgeManager = new EdgeManager(this, currentLevel, Side.BOTTOM);
         leftEdgeManager = new EdgeManager(this, currentLevel, Side.LEFT);
 
         processingProgressProperty.bind(rightEdgeManager.progressProperty().add(bottomEdgeManager.progressProperty().add(leftEdgeManager.progressProperty())));
-
+*/
         //Text file unbuffered.
             //new ReadTextFile(this, currentLevel);
         //Text file buffered.
