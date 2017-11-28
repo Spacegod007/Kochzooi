@@ -39,6 +39,8 @@ public class GenerateBufferedBinaryFileMapping
             List<Edge> edges = fractalEdgeListObserver.getEdges();
 
             out.position(0);
+            out.putInt(kochFractal.getNrOfEdges());
+
             for (Edge edge : edges) {
                 out.putDouble(edge.X1);
                 out.putDouble(edge.Y1);

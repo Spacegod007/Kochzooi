@@ -40,8 +40,9 @@ public class ReadTextFile {
                 for(int x = 0; x<4; x++) {
                     edgeValues[x] = Double.parseDouble(edgeSplit[x]);
                 }
-
-                edges.add(new Edge(edgeValues[0],edgeValues[1],edgeValues[2],edgeValues[3], edgeSplit[4]));
+                Edge edge = new Edge(edgeValues[0],edgeValues[1],edgeValues[2],edgeValues[3], edgeSplit[4]);
+                System.out.println(edge.toString());
+                edges.add(edge);
             }
             manager.addEdges(edges);
 
