@@ -17,10 +17,10 @@ public class ReadBufferedBinaryFileMapping {
 
             //Mapping a file into memory
             FileChannel fc = memoryMappedFile.getChannel();
-            MappedByteBuffer out = fc.map(FileChannel.MapMode.READ_ONLY, 0, NUMBER_OF_BYTES);
+            MappedByteBuffer out = fc.map(FileChannel.MapMode.READ_ONLY, 0, 1024*1024);
 
             //reading 10 bytes from memory file in Java
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 500; i++) {
                 System.out.print((char) out.get(i));
             }
         }

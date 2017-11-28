@@ -27,7 +27,7 @@ public class GenerateBufferedBinaryFileMapping
 
             //Mapping a file into memory
             FileChannel fc = memoryMappedFile.getChannel();
-            MappedByteBuffer out = fc.map(FileChannel.MapMode.READ_ONLY, 0, bytes);
+            MappedByteBuffer out = fc.map(FileChannel.MapMode.READ_WRITE, 0, bytes);
 
             FractalEdgeListObserver fractalEdgeListObserver = new FractalEdgeListObserver();
             kochFractal.addObserver(fractalEdgeListObserver);
@@ -36,18 +36,15 @@ public class GenerateBufferedBinaryFileMapping
             kochFractal.generateRightEdge();
             kochFractal.generateLeftEdge();
 
-
             List<Edge> edges = fractalEdgeListObserver.getEdges();
 
-            int x = 0;
+            out.position(0);
             for (Edge edge : edges) {
-                out.position(x);
                 out.putDouble(edge.X1);
                 out.putDouble(edge.Y1);
                 out.putDouble(edge.X2);
                 out.putDouble(edge.Y2);
                 out.putDouble(edge.getColor().getHue());
-                x++;
             }
 
 
