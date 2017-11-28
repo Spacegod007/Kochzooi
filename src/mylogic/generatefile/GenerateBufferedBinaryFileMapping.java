@@ -7,6 +7,7 @@ import mylogic.FractalEdgeListObserver;
 import timeutil.TimeStamp;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.MappedByteBuffer;
@@ -15,44 +16,45 @@ import java.util.List;
 
 public class GenerateBufferedBinaryFileMapping
 {
-    public GenerateBufferedBinaryFileMapping(int level)
-    {
+    private final int bytes = 1024*1024;
+    public GenerateBufferedBinaryFileMapping(int level){
+        KochFractal kochFractal = new KochFractal();
+        kochFractal.setLevel(level);
+
         TimeStamp timeStamp = new TimeStamp();
         timeStamp.setBegin();
+        try(RandomAccessFile memoryMappedFile = new RandomAccessFile(String.format("%sMapEdges.bin", String.valueOf(level)), "rw")) {
 
-        try(RandomAccessFile memoryMappedFile = new RandomAccessFile(String.format("%sMapEdges.bin", String.valueOf(level)), "rw"))
-        {
-            KochFractal kochFractal = new KochFractal();
-            kochFractal.setLevel(level);
+            //Mapping a file into memory
+            FileChannel fc = memoryMappedFile.getChannel();
+            MappedByteBuffer out = fc.map(FileChannel.MapMode.READ_ONLY, 0, bytes);
+
             FractalEdgeListObserver fractalEdgeListObserver = new FractalEdgeListObserver();
-            //new FractalBinaryFileMappingObserver(memoryMappedFile.getChannel()));
             kochFractal.addObserver(fractalEdgeListObserver);
 
-            kochFractal.generateLeftEdge();
             kochFractal.generateBottomEdge();
             kochFractal.generateRightEdge();
+            kochFractal.generateLeftEdge();
+
 
             List<Edge> edges = fractalEdgeListObserver.getEdges();
 
-
-            File file = new File(String.format("%sMapEdges.bin", String.valueOf(level)));
-
-            file.delete();
-
-            FileChannel fileChannel = new RandomAccessFile(file, "rw").getChannel();
-
-            MappedByteBuffer buffer = fileChannel.map(FileChannel.MapMode.READ_WRITE, 0, 1024*1024);//(7*8)*edges.size());
-            
-
-            buffer.put(FractalBinaryFileMappingObserver.serialize(edges));
+            int x = 0;
+            for (Edge edge : edges) {
+                out.position(x);
+                out.putDouble(edge.X1);
+                out.putDouble(edge.Y1);
+                out.putDouble(edge.X2);
+                out.putDouble(edge.Y2);
+                out.putDouble(edge.getColor().getHue());
+                x++;
+            }
 
 
             System.out.print("mapped done!");
             timeStamp.setEnd();
             System.out.printf("Generating binary filemapping: %s", timeStamp);
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
