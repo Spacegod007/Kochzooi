@@ -2,6 +2,7 @@ package mylogic.generatefile;
 
 import calculate.Edge;
 import calculate.KochFractal;
+import javafx.scene.paint.Color;
 import mylogic.FractalBinaryFileMappingObserver;
 import mylogic.FractalEdgeListObserver;
 import timeutil.TimeStamp;
@@ -41,12 +42,18 @@ public class GenerateBufferedBinaryFileMapping
             out.position(0);
             out.putInt(kochFractal.getNrOfEdges());
 
-            for (Edge edge : edges) {
+            for (Edge edge : edges)
+            {
                 out.putDouble(edge.X1);
                 out.putDouble(edge.Y1);
                 out.putDouble(edge.X2);
                 out.putDouble(edge.Y2);
-                out.putDouble(edge.getColor().getHue());
+
+                Color color = edge.getColor();
+
+                out.putDouble(color.getRed());
+                out.putDouble(color.getBlue());
+                out.putDouble(color.getGreen());
             }
 
 

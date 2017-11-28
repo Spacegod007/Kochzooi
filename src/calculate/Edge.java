@@ -20,13 +20,13 @@ public class Edge implements Serializable{
     public final double Y2;
     private final String color;
 
-    public Edge(double x1, double y1, double x2, double y2, double hue)
+    public Edge(double x1, double y1, double x2, double y2, double red, double blue, double green)
     {
         X1 = x1;
         Y1 = y1;
         X2 = x2;
         Y2 = y2;
-        color = Color.hsb(hue, 1, 1).toString();
+        color = Color.rgb((int) red, (int) green, (int) blue).toString();
     }
 
     public Edge(double X1, double Y1, double X2, double Y2, Color color) {
