@@ -25,11 +25,26 @@ public class ReadBufferedBinaryFileMapping {
 
             //Mapping a file into memory
             FileChannel fc = memoryMappedFile.getChannel();
-            MappedByteBuffer out = fc.map(FileChannel.MapMode.READ_ONLY, 0, 1024*1024);
+            MappedByteBuffer out = fc.map(FileChannel.MapMode.READ_ONLY, 0, fc.size()); //1024*1024);
 
-            int amountOfData = out.getInt(0) * 7;
-            out.position(1);
-            try {
+            //int amountOfData = out.getInt(0) * 7;
+            //out.position(1);
+            Edge e;
+
+            while(out.hasRemaining()){
+                e = new Edge(out.getDouble(),
+                        out.getDouble(),
+                        out.getDouble(),
+                        out.getDouble(),
+                        out.getDouble(),
+                        out.getDouble(),
+                        out.getDouble()
+                );
+                edges.add(e);
+            }
+            manager.addEdges(edges);
+            /*try {
+
                 //reading 10 bytes from memory file in Java
                 for (int i = 0; i < amountOfData; i+=7) {
                     double X1 = out.getDouble(i + 1);
@@ -43,14 +58,20 @@ public class ReadBufferedBinaryFileMapping {
                     System.out.println(edge.toString());
                     System.out.println(i);
                     edges.add(edge);
+
                 }
                 manager.addEdges(edges);
             }
             catch(Exception e){
                 e.printStackTrace();
-            }
+            }*/
         }
         catch (IOException e) {
+            System.out.println(edges.size());
+            e.printStackTrace();
+        }
+        catch(Exception e){
+            System.out.println(edges.size());
             e.printStackTrace();
         }
     }
