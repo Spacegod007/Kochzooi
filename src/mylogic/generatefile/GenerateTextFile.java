@@ -14,10 +14,11 @@ public class GenerateTextFile
     public GenerateTextFile(int level)
     {
 
+
         KochFractal kochFractal = new KochFractal();
         kochFractal.setLevel(level);
 
-        try (OutputStreamWriter outputStreamWriter = new FileWriter(String.format("%sedges.txt", String.valueOf(level))))
+        try (OutputStreamWriter outputStreamWriter = new FileWriter("tmp/edges"))
         {
 
             kochFractal.addObserver(new FractalTextStreamObserver(outputStreamWriter));

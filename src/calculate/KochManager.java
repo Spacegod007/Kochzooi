@@ -86,7 +86,7 @@ public class KochManager
         processingProgressProperty.bind(rightEdgeManager.progressProperty().add(bottomEdgeManager.progressProperty().add(leftEdgeManager.progressProperty())));
 */
         //Text file unbuffered.
-//          new ReadTextFile(this, currentLevel);
+          new ReadTextFile(this, currentLevel);
         //Text file buffered.
 //          new ReadBufferedTextFile(this,currentLevel);
         //Binary file unbuffered.
@@ -94,7 +94,7 @@ public class KochManager
         //Binary file buffered.
 //          new ReadBufferedBinaryFile(this,currentLevel);
         //Buffered binary file mapping
-            new ReadBufferedBinaryFileMapping(this,currentLevel);
+            //new ReadBufferedBinaryFileMapping(this,currentLevel);
 
         /*
         executorService.execute(rightEdgeManager);
