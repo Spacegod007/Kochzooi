@@ -4,6 +4,7 @@ import calculate.Edge;
 import calculate.KochManager;
 import javafx.scene.paint.*;
 import javafx.scene.paint.Color;
+import timeutil.TimeStamp;
 
 import java.awt.*;
 import java.io.IOException;
@@ -20,6 +21,9 @@ public class ReadBufferedBinaryFileMapping {
 
     public ReadBufferedBinaryFileMapping(KochManager manager, int level)
     {
+        TimeStamp timeStamp = new TimeStamp();
+        timeStamp.setBegin();
+
         List<Edge> edges = new ArrayList<>();
         try(RandomAccessFile memoryMappedFile = new RandomAccessFile(String.format("%sMapEdges.bin", String.valueOf(level)), "r")) {
 
@@ -65,6 +69,9 @@ public class ReadBufferedBinaryFileMapping {
             catch(Exception e){
                 e.printStackTrace();
             }*/
+
+            timeStamp.setEnd();
+            System.out.println("genereren: " + timeStamp);
         }
         catch (IOException e) {
             System.out.println(edges.size());
