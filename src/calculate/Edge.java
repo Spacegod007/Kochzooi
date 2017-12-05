@@ -26,7 +26,12 @@ public class Edge implements Serializable{
         Y1 = y1;
         X2 = x2;
         Y2 = y2;
-        color = Color.rgb((int) red, (int) green, (int) blue).toString();
+
+        int redInt = (int) (Math.floor(red >= 1.0 ? 255 : red * 256.0));
+        int blueInt = (int) (Math.floor(blue >= 1.0 ? 255 : blue * 256.0));
+        int greenInt = (int) (Math.floor(green >= 1.0 ? 255 : green * 256.0));
+
+        color = Color.rgb(redInt, greenInt, blueInt).toString();
     }
 
     public Edge(double X1, double Y1, double X2, double Y2, Color color) {
