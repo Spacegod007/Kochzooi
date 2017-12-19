@@ -23,6 +23,7 @@ public class FractalBinaryStreamObserver implements Observer
         try
         {
             objectOutput.writeObject(arg);
+            objectOutput.flush();
         }
         catch (IOException e)
         {

@@ -139,12 +139,12 @@ public class JSF31KochFractalFX extends Application {
         resetZoom();
         kochManager = new KochManager(this, processingProgressBar.progressProperty());
         kochManager.changeLevel(currentLevel);
-        
+
         // Create the scene and add the grid pane
         Group root = new Group();
         Scene scene = new Scene(root, kpWidth+100, kpHeight+300);
         root.getChildren().add(grid);
-        
+
         // Define title and assign the scene for main window
         primaryStage.setTitle("Koch Fractal");
         primaryStage.setScene(scene);

@@ -3,9 +3,12 @@ package calculate;
 import javafx.beans.property.DoubleProperty;
 import javafx.scene.paint.Color;
 import jsf31kochfractalfx.JSF31KochFractalFX;
+import mylogic.generatefile.GenerateTextFile;
 import mylogic.readFile.*;
+import mylogic.sockets.ReceivingClientSocket;
 import timeutil.TimeStamp;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -85,8 +88,10 @@ public class KochManager
 
         processingProgressProperty.bind(rightEdgeManager.progressProperty().add(bottomEdgeManager.progressProperty().add(leftEdgeManager.progressProperty())));
 */
+//        new Thread(() -> new GenerateTextFile(currentLevel)).start();
+
         //Text file unbuffered.
-          new ReadTextFile(this, currentLevel);
+//        new ReadTextFile(this, currentLevel);
         //Text file buffered.
 //          new ReadBufferedTextFile(this,currentLevel);
         //Binary file unbuffered.
@@ -103,6 +108,16 @@ public class KochManager
 
         executorService.execute(new EdgeTracker(this, rightEdgeManager, bottomEdgeManager, leftEdgeManager));
         */
+
+        try
+        {
+            addEdges(ReceivingClientSocket.getEdges(currentLevel));
+        }
+        catch (IOException e)
+        {
+            System.out.println("Error with sockets");
+            e.printStackTrace();
+        }
     }
 
     public void drawEdges()
