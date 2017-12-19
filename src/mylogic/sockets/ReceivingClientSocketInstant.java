@@ -18,6 +18,33 @@ public class ReceivingClientSocketInstant {
     private ReceivingClientSocketInstant()
     {}
 
+    public static Edge getZoomedEdge(EdgePackage edgePackage) throws IOException{
+        Socket socket = new Socket("127.0.0.1", 8100);
+
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+
+        objectOutputStream.writeInt(-5);
+        objectOutputStream.writeObject(edgePackage);
+        objectOutputStream.flush();
+
+        ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
+
+        Object readobject = null;
+
+        try {
+            readobject = objectInputStream.readObject();
+            while (readobject != null) {
+                if (readobject instanceof Edge) {
+                    return ((Edge) readobject);
+                }
+            }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        System.out.println("uhoh");
+        return edgePackage.getEdge();
+    }
+
     public static List<Edge> getEdges(int level) throws IOException
     {
         Socket socket = new Socket("127.0.0.1", 8100);
