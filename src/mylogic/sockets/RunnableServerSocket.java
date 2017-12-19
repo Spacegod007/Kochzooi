@@ -46,6 +46,8 @@ public class RunnableServerSocket implements Runnable
             int readObject = objectInputStream.readInt();
 
             integerMessageReceived(readObject, outputStream);
+
+
         }
         catch (IOException e)
         {
@@ -62,6 +64,8 @@ public class RunnableServerSocket implements Runnable
             e.printStackTrace();
         }
     }
+
+
 
     private void integerMessageReceived(Integer level, OutputStream outputStream)
     {

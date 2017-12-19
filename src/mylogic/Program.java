@@ -22,8 +22,6 @@ public class Program {
             {
                 new Thread(new RunnableServerSocket(serverSocket.accept())).start();
             }
-//            RunnableServerSocket runnableServerSocket = new RunnableServerSocket(serverSocket.accept());
-//            runnableServerSocket.run();
 
         }
         catch (IOException e)

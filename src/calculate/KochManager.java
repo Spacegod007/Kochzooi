@@ -3,16 +3,12 @@ package calculate;
 import javafx.beans.property.DoubleProperty;
 import javafx.scene.paint.Color;
 import jsf31kochfractalfx.JSF31KochFractalFX;
-import mylogic.generatefile.GenerateTextFile;
-import mylogic.readFile.*;
 import mylogic.sockets.ReceivingClientSocket;
 import timeutil.TimeStamp;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class KochManager
 {
@@ -80,28 +76,15 @@ public class KochManager
     }
 
     private void makeThreads(int currentLevel) {
-        /*executorService = Executors.newFixedThreadPool(4);
+        /*
+        executorService = Executors.newFixedThreadPool(4);
 
         rightEdgeManager = new EdgeManager(this, currentLevel, Side.RIGHT);
         bottomEdgeManager = new EdgeManager(this, currentLevel, Side.BOTTOM);
         leftEdgeManager = new EdgeManager(this, currentLevel, Side.LEFT);
 
         processingProgressProperty.bind(rightEdgeManager.progressProperty().add(bottomEdgeManager.progressProperty().add(leftEdgeManager.progressProperty())));
-*/
-//        new Thread(() -> new GenerateTextFile(currentLevel)).start();
 
-        //Text file unbuffered.
-//        new ReadTextFile(this, currentLevel);
-        //Text file buffered.
-//          new ReadBufferedTextFile(this,currentLevel);
-        //Binary file unbuffered.
-//          new ReadBinaryFile(this,currentLevel);
-        //Binary file buffered.
-//          new ReadBufferedBinaryFile(this,currentLevel);
-        //Buffered binary file mapping
-            //new ReadBufferedBinaryFileMapping(this,currentLevel);
-
-        /*
         executorService.execute(rightEdgeManager);
         executorService.execute(bottomEdgeManager);
         executorService.execute(leftEdgeManager);
@@ -109,15 +92,16 @@ public class KochManager
         executorService.execute(new EdgeTracker(this, rightEdgeManager, bottomEdgeManager, leftEdgeManager));
         */
 
-        try
-        {
-            addEdges(ReceivingClientSocket.getEdges(currentLevel));
-        }
-        catch (IOException e)
-        {
-            System.out.println("Error with sockets");
-            e.printStackTrace();
-        }
+        new Thread(new ReceivingClientSocket(currentLevel, this)).start();
+
+//        try
+//        {
+//            addEdges(ReceivingClientSocketInstant.getEdges(currentLevel));
+//        } catch (IOException e)
+//        {
+//        }
+
+//        new Thread(new EdgeAdderRunnable(this, currentLevel)).start();
     }
 
     public void drawEdges()
