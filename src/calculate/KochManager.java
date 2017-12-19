@@ -3,9 +3,12 @@ package calculate;
 import javafx.beans.property.DoubleProperty;
 import javafx.scene.paint.Color;
 import jsf31kochfractalfx.JSF31KochFractalFX;
+import mylogic.sockets.EdgePackage;
 import mylogic.sockets.ReceivingClientSocket;
+import mylogic.sockets.ReceivingClientSocketInstant;
 import timeutil.TimeStamp;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -92,20 +95,19 @@ public class KochManager
         executorService.execute(new EdgeTracker(this, rightEdgeManager, bottomEdgeManager, leftEdgeManager));
         */
 
-        new Thread(new ReceivingClientSocket(currentLevel, this)).start();
+        //new Thread(new ReceivingClientSocket(currentLevel, this)).start();
 
-//        try
-//        {
-//            addEdges(ReceivingClientSocketInstant.getEdges(currentLevel));
-//        } catch (IOException e)
-//        {
-//        }
+        try
+        {
+            addEdges(ReceivingClientSocketInstant.getEdges(currentLevel));
+        } catch (IOException e)
+        {
+        }
 
 //        new Thread(new EdgeAdderRunnable(this, currentLevel)).start();
     }
 
-    public void drawEdges()
-    {
+    public void drawEdges() {
         jsf31KochFractalFX.clearKochPanel();
 
         TimeStamp drawingTimestamp = new TimeStamp();
@@ -133,5 +135,9 @@ public class KochManager
             edges.add(tempEdge);
             jsf31KochFractalFX.requestDrawEdges();
         }
+    }
+
+    public Edge calcZoomed(EdgePackage edgePackage) throws IOException {
+       return ReceivingClientSocketInstant.getZoomedEdge(edgePackage);
     }
 }

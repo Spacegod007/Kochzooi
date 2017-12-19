@@ -1,5 +1,6 @@
 package mylogic.sockets;
 
+import calculate.Edge;
 import calculate.KochFractal;
 import mylogic.FractalBinaryStreamObserver;
 
@@ -44,6 +45,14 @@ public class RunnableServerSocket implements Runnable
         try
         {
             int readObject = objectInputStream.readInt();
+            if(readObject == -5){
+                Edge edge = calcEdgePackage((EdgePackage)objectInputStream.readObject());
+                try(ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream)){
+                    objectOutputStream.writeObject(edge);
+                    objectOutputStream.flush();
+                }
+                //System.out.println(((EdgePackage)objectInputStream.readObject()).getZoom());
+            }
 
             integerMessageReceived(readObject, outputStream);
 
@@ -51,6 +60,8 @@ public class RunnableServerSocket implements Runnable
         }
         catch (IOException e)
         {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -63,6 +74,21 @@ public class RunnableServerSocket implements Runnable
         {
             e.printStackTrace();
         }
+    }
+
+    private Edge calcEdgePackage(EdgePackage edgePackage){
+        Edge e = edgePackage.getEdge();
+        double zoom = edgePackage.getZoom();
+        double zoomTranslateX = edgePackage.getZoomTranslateX();
+        double zoomTranslateY = edgePackage.getZoomTranslateY();
+        Edge edge = new Edge(
+                e.X1 * zoom + zoomTranslateX,
+                e.Y1 * zoom + zoomTranslateY,
+                e.X2 * zoom + zoomTranslateX,
+                e.Y2 * zoom + zoomTranslateY,
+                e.getColor()
+        );
+        return edge;
     }
 
 

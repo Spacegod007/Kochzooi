@@ -22,6 +22,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import mylogic.sockets.EdgePackage;
+
+import java.io.IOException;
 
 /**
  *
@@ -164,9 +167,11 @@ public class JSF31KochFractalFX extends Application {
     public void drawEdge(Edge e) {
         // Graphics
         GraphicsContext gc = kochPanel.getGraphicsContext2D();
-        
-        // Adjust edge for zoom and drag
-        Edge e1 = edgeAfterZoomAndDrag(e);
+
+        try {
+            // Adjust edge for zoom and drag
+            Edge e1 = edgeAfterZoomAndDrag(e);
+
         
         // Set line color
         gc.setStroke(e1.getColor());
@@ -184,6 +189,10 @@ public class JSF31KochFractalFX extends Application {
         
         // Draw line
         gc.strokeLine(e1.X1,e1.Y1,e1.X2,e1.Y2);
+        }
+        catch(IOException ignored){
+
+        }
     }
     
     public void setTextNrEdges(String text) {
@@ -263,14 +272,17 @@ public class JSF31KochFractalFX extends Application {
         zoomTranslateY = (kpHeight - kpSize) / 2.0;
     }
 
-    private Edge edgeAfterZoomAndDrag(Edge e) {
-        return new Edge(
+    private Edge edgeAfterZoomAndDrag(Edge e) throws IOException {
+        /*return new Edge(
                 e.X1 * zoom + zoomTranslateX,
                 e.Y1 * zoom + zoomTranslateY,
                 e.X2 * zoom + zoomTranslateX,
                 e.Y2 * zoom + zoomTranslateY,
                 e.getColor()
-        );
+        );*/
+        EdgePackage edgePackage = new EdgePackage(e, zoom, zoomTranslateX, zoomTranslateY);
+        return kochManager.calcZoomed(edgePackage);
+
     }
 
     /**
